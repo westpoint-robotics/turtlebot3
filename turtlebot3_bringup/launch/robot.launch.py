@@ -46,7 +46,11 @@ def generate_launch_description():
     lidar_pkg_dir = LaunchConfiguration(
             'lidar_pkg_dir',
             default=os.path.join(get_package_share_directory('hls_lfcd_lds_driver'), 'launch'))
-
+    
+    laser_scan_matcher_dir = LaunchConfiguration(
+            'laser_scan_matcher_dir',
+            default=os.path.join(get_package_share_directory('ros2_laser_scan_matcher'), 'launch'))
+            
     use_sim_time = LaunchConfiguration('use_sim_time', default='false')
 
     return LaunchDescription([
@@ -84,14 +88,21 @@ def generate_launch_description():
             launch_arguments={'port': '/dev/ttyUSB0', 'frame_id': 'base_scan'}.items(),
         ),
 
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource([laser_scan_matcher_dir, "/laser_scan_matcher.launch.py"]),
+        ),
+
         Node(
             package='turtlebot3_node',
             executable='turtlebot3_ros',
             parameters=[
                 tb3_param_dir,
-                {'odometry.frame_id': PythonExpression(['"', namespace, '/odom"'])},
+                {'odometry.frame_id': PythonExpression(['"', namespace, '/odom_diff"'])},
                 {'odometry.child_frame_id': PythonExpression(
-                    ['"', namespace, '/base_footprint"'])}],
+                    ['"', namespace, '/base_footprint_diff"'])}],
+            remappings=[
+                ('odom', 'odom_diff')
+            ],
             arguments=['-i', usb_port],
             output='screen'),
     ])
