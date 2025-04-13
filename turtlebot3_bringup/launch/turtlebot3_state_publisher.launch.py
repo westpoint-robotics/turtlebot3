@@ -29,7 +29,7 @@ from launch_ros.actions import Node
 def generate_launch_description():
     TURTLEBOT3_MODEL = os.environ['TURTLEBOT3_MODEL']
 
-    namespace = LaunchConfiguration('namespace')
+    namespace = LaunchConfiguration('namespace', default='')
 
     use_sim_time = LaunchConfiguration('use_sim_time', default='false')
     urdf_file_name = 'turtlebot3_' + TURTLEBOT3_MODEL + '.urdf'
@@ -55,6 +55,10 @@ def generate_launch_description():
             'use_sim_time',
             default_value='false',
             description='Use simulation (Gazebo) clock if true'),
+        DeclareLaunchArgument(
+            'namespace',
+            default_value=namespace,
+            description='Namespace for nodes'),
         Node(
             package='robot_state_publisher',
             executable='robot_state_publisher',
