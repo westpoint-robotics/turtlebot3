@@ -42,6 +42,7 @@ def generate_launch_description():
             get_package_share_directory('turtlebot3_bringup'),
             'param',
             'waffle_pi.yaml'))
+            
 
     lidar_pkg_dir = LaunchConfiguration(
         'lidar_pkg_dir',
@@ -84,18 +85,14 @@ def generate_launch_description():
             launch_arguments={'port': '/dev/ttyUSB0', 'frame_id': 'base_scan'}.items(),
         ),
 
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([laser_scan_matcher_dir, "/laser_scan_matcher.launch.py"]),
-        ),
-
         Node(
             package='turtlebot3_node',
             executable='turtlebot3_ros',
             parameters=[
                 tb3_param_dir,
-                {'odometry.frame_id': PythonExpression(['"', namespace, '/odom_diff"'])},
+                {'odometry.frame_id': PythonExpression(['"', namespace, '/odom"'])},
                 {'odometry.child_frame_id': PythonExpression(
-                    ['"', namespace, '/base_footprint_diff"'])}],
+                    ['"', namespace, '/base_footprint"'])}],
             remappings=[
                 ('odom', 'odom_diff')
             ],
