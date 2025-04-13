@@ -295,7 +295,7 @@ collision_monitor:
     state_topic: "collision_monitor_state"
     transform_tolerance: 0.5
     source_timeout: 5.0
-    base_shift_correction: false
+    base_shift_correction: true
     stop_pub_timeout: 2.0
     enable_stamped_cmd_vel: true
     use_realtime_priority: false
