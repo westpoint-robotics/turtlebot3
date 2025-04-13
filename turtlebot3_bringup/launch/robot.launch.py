@@ -36,21 +36,26 @@ def generate_launch_description():
 
     usb_port = LaunchConfiguration('usb_port', default='/dev/ttyACM0')
 
-    tb3_param_dir = LaunchConfiguration(
-        'tb3_param_dir',
-        default=os.path.join(
-            get_package_share_directory('turtlebot3_bringup'),
-            'param',
-            'waffle_pi.yaml'))
+    if ROS_DISTRO == 'humble':
+        tb3_param_dir = LaunchConfiguration(
+            'tb3_param_dir',
+            default=os.path.join(
+                get_package_share_directory('turtlebot3_bringup'),
+                'param',
+                ROS_DISTRO,
+                TURTLEBOT3_MODEL + '.yaml'))
+    else:
+        tb3_param_dir = LaunchConfiguration(
+            'tb3_param_dir',
+            default=os.path.join(
+                get_package_share_directory('turtlebot3_bringup'),
+                'param',
+                TURTLEBOT3_MODEL + '.yaml'))
 
     lidar_pkg_dir = LaunchConfiguration(
-            'lidar_pkg_dir',
-            default=os.path.join(get_package_share_directory('hls_lfcd_lds_driver'), 'launch'))
-    
-    laser_scan_matcher_dir = LaunchConfiguration(
-            'laser_scan_matcher_dir',
-            default=os.path.join(get_package_share_directory('ros2_laser_scan_matcher'), 'launch'))
-            
+        'lidar_pkg_dir',
+        default=os.path.join(get_package_share_directory('hls_lfcd_lds_driver'), 'launch'))
+
     use_sim_time = LaunchConfiguration('use_sim_time', default='false')
 
     return LaunchDescription([
