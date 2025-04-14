@@ -93,9 +93,6 @@ def generate_launch_description():
                 {'odometry.frame_id': PythonExpression(['"', namespace, '/odom"'])},
                 {'odometry.child_frame_id': PythonExpression(
                     ['"', namespace, '/base_footprint"'])}],
-            remappings=[
-                ('odom', 'odom_diff')
-            ],
             arguments=['-i', usb_port],
             output='screen'),
     ])

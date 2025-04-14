@@ -124,7 +124,7 @@ controller_server:
       min_vel_y: 0.0
       max_vel_x: 0.3
       max_vel_y: 0.0
-      max_vel_theta: 1.5
+      max_vel_theta: 1.0
       min_speed_xy: 0.0
       max_speed_xy: 0.3
       min_speed_theta: 0.0
@@ -175,8 +175,8 @@ local_costmap:
       plugins: ["obstacle_layer", "inflation_layer"]
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        inflation_radius: 1.0 #0.5
-        cost_scaling_factor: 1.0 #5.0
+        inflation_radius: 0.5
+        cost_scaling_factor: 5.0
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
         enabled: true
@@ -223,8 +223,8 @@ global_costmap:
         transform_tolerance: 0.1
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        inflation_radius: 1.0 #0.5
-        cost_scaling_factor: 1.0 #5.0
+        inflation_radius: 0.5
+        cost_scaling_factor: 5.0
       always_send_full_costmap: true
 
 map_server:
@@ -245,7 +245,7 @@ planner_server:
     GridBased:
       plugin: "nav2_navfn_planner::NavfnPlanner"
       tolerance: 0.5
-      use_astar: true
+      use_astar: false
       allow_unknown: true
 
 behavior_server:
@@ -271,7 +271,7 @@ behavior_server:
     robot_base_frame: base_footprint
     transform_timeout: 0.1
     simulate_ahead_time: 2.0
-    max_rotational_vel: 2.0
+    max_rotational_vel: 1.0
     min_rotational_vel: 0.4
     rotational_acc_lim: 3.2
     enable_stamped_cmd_vel: true
@@ -304,7 +304,7 @@ collision_monitor:
       type: "circle"
       radius: 0.1
       action_type: "stop"
-      min_points: 10 # 4
+      min_points: 4
       visualize: true
       polygon_pub_topic: "polygon_stop"
       enabled: true
@@ -312,7 +312,7 @@ collision_monitor:
       type: "polygon"
       points: "[[0.1, 0.1], [0.1, -0.1], [-0.1, -0.1], [-0.1, 0.1]]"
       action_type: "slowdown"
-      min_points: 10 # 4
+      min_points: 4
       slowdown_ratio: 0.3
       visualize: true
       polygon_pub_topic: "polygon_slowdown"
@@ -321,7 +321,7 @@ collision_monitor:
       type: "polygon"
       points: "[[0.1, 0.1], [0.1, -0.1], [-0.1, -0.1], [-0.1, 0.1]]"
       action_type: "limit"
-      min_points: 10 # 4
+      min_points: 4
       linear_limit: 0.4
       angular_limit: 0.5
       visualize: true
@@ -333,13 +333,13 @@ collision_monitor:
       footprint_topic: "/local_costmap/published_footprint"
       time_before_collision: 2.0
       simulation_time_step: 0.02
-      min_points: 16 #6
+      min_points: 6
       visualize: False
       enabled: true
     VelocityPolygonStop:
       type: "velocity_polygon"
       action_type: "stop"
-      min_points: 16 #6
+      min_points: 6
       visualize: true
       enabled: False
       polygon_pub_topic: "velocity_polygon_stop"
@@ -371,7 +371,7 @@ collision_monitor:
         theta_max: 1.0
     observation_sources: ["scan"]
     scan:
-      source_timeout: 0.4
+      source_timeout: 0.3
       type: "scan"
       topic: "/scan"
       enabled: true
