@@ -94,6 +94,7 @@ class Turtlebot3PatrolClient(Node):
     def feedback_callback(self, feedback_msg):
         feedback = feedback_msg.feedback
         self.get_logger().info('Received feedback: {0}'.format(feedback.state))
+        self.get_logger().info('AT A WAYPOINT: {0}'.format(feedback.state))
 
 
 def main(args=None):
