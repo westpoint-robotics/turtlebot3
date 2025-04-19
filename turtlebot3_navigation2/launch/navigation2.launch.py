@@ -27,13 +27,13 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time', default='false')
-    use_rviz = LaunchConfiguration('use_rviz', default='false')
+    use_rviz = LaunchConfiguration('use_rviz', default='true')
     map_dir = LaunchConfiguration(
         'map',
         default=os.path.join(
             get_package_share_directory('turtlebot3_navigation2'),
             'map',
-            'ee484_maze02.yaml'))
+            'ee484_maze04.yaml'))
             # 'home02.yaml'))
 
     param_file_name = 'waffle_pi.yaml'
