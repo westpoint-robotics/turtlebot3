@@ -33,7 +33,7 @@ def generate_launch_description():
         default=os.path.join(
             get_package_share_directory('turtlebot3_navigation2'),
             'map',
-            'ee484_maze04.yaml'))
+            'ee484_maze.yaml'))
             # 'home02.yaml'))
 
     param_file_name = 'waffle_pi.yaml'

@@ -1,10 +1,10 @@
 amcl:
   ros__parameters:
-    alpha1: 0.7
-    alpha2: 0.7
-    alpha3: 0.7
-    alpha4: 0.7
-    alpha5: 0.7
+    alpha1: 0.7 #0.2
+    alpha2: 0.7 #0.2
+    alpha3: 0.7 #0.2
+    alpha4: 0.7 #0.2
+    alpha5: 0.7 #0.2
     base_frame_id: "base_footprint"
     beam_skip_distance: 0.5
     beam_skip_error_threshold: 0.9
@@ -38,7 +38,7 @@ amcl:
     z_short: 0.05
     scan_topic: scan
     map_topic: map
-    set_initial_pose: true
+    set_initial_pose: true  # false
     always_reset_initial_pose: false
     first_map_only: false
     initial_pose:
@@ -158,6 +158,7 @@ controller_server:
       RotateToGoal.scale: 32.0
       RotateToGoal.slowing_factor: 5.0
       RotateToGoal.lookahead_time: -1.0
+      forward_prune_distance: 0.55
     enable_stamped_cmd_vel: true
 
 local_costmap:
@@ -245,7 +246,7 @@ planner_server:
     GridBased:
       plugin: "nav2_navfn_planner::NavfnPlanner"
       tolerance: 0.5
-      use_astar: false
+      use_astar: true
       allow_unknown: true
 
 behavior_server:
