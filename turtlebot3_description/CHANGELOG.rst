@@ -2,6 +2,36 @@
 Changelog for package turtlebot3_description
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.3.3 (2025-07-11)
+------------------
+* None
+
+2.3.2 (2025-07-08)
+------------------
+* None
+
+2.3.1 (2025-05-30)
+------------------
+* None
+
+2.3.0 (2025-05-23)
+------------------
+* None
+
+2.2.9 (2025-04-15)
+------------------
+* fixed typo error in urdf
+* Contributors: Hyungyu Kim
+
+2.2.8 (2025-04-11)
+------------------
+* Support flexible configuration of the frame_id used when publishing the topic
+* Contributors: Hyungyu Kim
+
+2.2.7 (2025-03-27)
+------------------
+* None
+
 2.2.6 (2025-03-24)
 ------------------
 * None

@@ -33,12 +33,15 @@ Odometry::Odometry(
   use_imu_(false),
   publish_tf_(false),
   last_theta_initialized_(false),
-  imu_angle_(0.0f)
+  imu_angle_(0.0f),
+  robot_pose_({0.0, 0.0, 0.0}),
+  robot_vel_({0.0, 0.0, 0.0})
 {
   RCLCPP_INFO(nh_->get_logger(), "Init Odometry");
 
   nh_->declare_parameter<std::string>("odometry.frame_id");
   nh_->declare_parameter<std::string>("odometry.child_frame_id");
+  nh_->declare_parameter<std::string>("namespace");
 
   nh_->declare_parameter<bool>("odometry.use_imu");
   nh_->declare_parameter<bool>("odometry.publish_tf");
@@ -57,13 +60,21 @@ Odometry::Odometry(
     "odometry.frame_id",
     frame_id_of_odometry_,
     std::string("odom"));
-  if (frame_id_of_odometry_[0] == ('/')) {frame_id_of_odometry_.erase(0, 1);}
 
   nh_->get_parameter_or<std::string>(
     "odometry.child_frame_id",
     child_frame_id_of_odometry_,
     std::string("base_footprint"));
-  if (child_frame_id_of_odometry_[0] == ('/')) {child_frame_id_of_odometry_.erase(0, 1);}
+
+  nh_->get_parameter_or<std::string>(
+    "namespace",
+    name_space_,
+    std::string(""));
+
+  if (name_space_ != "") {
+    frame_id_of_odometry_ = name_space_ + "/" + frame_id_of_odometry_;
+    child_frame_id_of_odometry_ = name_space_ + "/" + child_frame_id_of_odometry_;
+  }
 
   auto qos = rclcpp::QoS(rclcpp::KeepLast(10));
   odom_pub_ = nh_->create_publisher<nav_msgs::msg::Odometry>("odom", qos);
