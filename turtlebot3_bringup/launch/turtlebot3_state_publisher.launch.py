@@ -30,7 +30,7 @@ from launch_ros.actions import Node
 def generate_launch_description():
     TURTLEBOT3_MODEL = os.environ['TURTLEBOT3_MODEL']
 
-    namespace = LaunchConfiguration('namespace', default='')
+    namespace = LaunchConfiguration('namespace')
 
     use_sim_time = LaunchConfiguration('use_sim_time', default='false')
     urdf_file_name = 'turtlebot3_' + TURTLEBOT3_MODEL + '.urdf'
@@ -51,8 +51,6 @@ def generate_launch_description():
 
     # Major refactor of the robot_state_publisher
     # Reference page: https://github.com/ros2/demos/pull/426
-    with open(urdf, 'r') as infp:
-        robot_desc = infp.read()
 
     rsp_params = {'robot_description': robot_desc}
 
@@ -63,16 +61,11 @@ def generate_launch_description():
             'use_sim_time',
             default_value='false',
             description='Use simulation (Gazebo) clock if true'),
-        DeclareLaunchArgument(
-            'namespace',
-            default_value=namespace,
-            description='Namespace for nodes'),
         Node(
             package='robot_state_publisher',
             executable='robot_state_publisher',
             output='screen',
             parameters=[
                     rsp_params,
-                    {'use_sim_time': use_sim_time},
-                    {'frame_prefix': PythonExpression(['"', namespace, '/"'])}])
+                    {'use_sim_time': use_sim_time}])
     ])

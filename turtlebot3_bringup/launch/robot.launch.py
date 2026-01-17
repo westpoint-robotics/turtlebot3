@@ -24,7 +24,6 @@ from launch.actions import DeclareLaunchArgument
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
-from launch.substitutions import PythonExpression
 from launch.substitutions import ThisLaunchFileDir
 from launch_ros.actions import Node
 from launch_ros.actions import PushRosNamespace
@@ -42,7 +41,6 @@ def generate_launch_description():
             get_package_share_directory('turtlebot3_bringup'),
             'param',
             'waffle_pi.yaml'))
-            
 
     lidar_pkg_dir = LaunchConfiguration(
         'lidar_pkg_dir',
@@ -82,7 +80,9 @@ def generate_launch_description():
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([lidar_pkg_dir, "/hlds_laser.launch.py"]),
-            launch_arguments={'port': '/dev/ttyUSB0', 'frame_id': 'base_scan'}.items(),
+            launch_arguments={'port': '/dev/ttyUSB0',
+                              'frame_id': 'base_scan',
+                              'namespace': namespace}.items(),
         ),
 
         Node(
@@ -90,9 +90,7 @@ def generate_launch_description():
             executable='turtlebot3_ros',
             parameters=[
                 tb3_param_dir,
-                {'odometry.frame_id': PythonExpression(['"', namespace, '/odom"'])},
-                {'odometry.child_frame_id': PythonExpression(
-                    ['"', namespace, '/base_footprint"'])}],
+                {'namespace': namespace}],
             arguments=['-i', usb_port],
             output='screen'),
     ])
