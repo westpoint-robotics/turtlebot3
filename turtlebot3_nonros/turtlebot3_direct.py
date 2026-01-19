@@ -737,37 +737,47 @@ if __name__ == '__main__':
     
         # Example 1: Move forward for ?? seconds
         # All these need to be redone to look like this
+
+        is_done = False
+        vel_tuple = (0.0,0.0)
         seconds_to_run = 3
+        current_state = "start"
         end_time = time.time() + seconds_to_run
-        print(f"\nMoving forward for {seconds_to_run} seconds...")
-        while time.time() < end_time:
-            if robot.set_velocity(0.1, 0.0):  # 0.1 m/s forward
+        while not is_done:
+
+            # Transition betweens states.
+            if current_state == "start": 
+                current_state = "forward"                    
+                print(f"\nMoving forward for {seconds_to_run} seconds...")
+                vel_tuple=(0.1, 0.0)
+                end_time = time.time() + seconds_to_run
+            if time.time() > end_time:
+                if current_state == "forward":
+                    current_state = "rotate"                    
+                    print(f"Rotating for {seconds_to_run} seconds...")
+                    vel_tuple=(0.0, 0.5)
+                    end_time = time.time() + seconds_to_run
+                elif current_state == "rotate":
+                    current_state = "curve"                    
+                    print(f"Moving in curve {seconds_to_run} seconds...")
+                    vel_tuple=(0.1, 0.3)
+                    end_time = time.time() + seconds_to_run
+                elif current_state == "curve":
+                    current_state = "stop"                    
+                    print("Stopping...")
+                    vel_tuple=(0.0, 0.0)
+                    end_time = time.time() + seconds_to_run
+                else:
+                    is_done=True
+                    robot.stop()
+
+            # Set the velocity based on the state the robot is in.
+            if robot.set_velocity(vel_tuple):  # Only change the velocity in one place in the code.
                 pass
             else:
                 print("ERROR: Failed to set velocity")
-        
-        # Example 2: Rotate for 2 seconds
-        end_time = time.time() + seconds_to_run
-        print(f"Rotating for {seconds_to_run} seconds...")
-        while time.time() < end_time:
-            if robot.set_velocity(0.0, 0.5):  # 0.5 rad/s rotation
-                pass
-            else:
-                print("ERROR: Failed to set velocity")
-                
-        # Example 3: Move in a curve
-        end_time = time.time() + seconds_to_run
-        print(f"Moving in curve {seconds_to_run} seconds...")
-        while time.time() < end_time:
-            if robot.set_velocity(0.1, 0.3):  # Forward + rotation
-                pass
-            else:
-                print("ERROR: Failed to set velocity")
-        
-        # Stop
-        print("Stopping...")
-        robot.stop()
-        
+        # End of the big while loop 
+       
         # Read motor status
         print("\nReading motor status...")
         status = robot.get_motor_status()
