@@ -560,7 +560,7 @@ class TurtleBot3Controller:
             logger.error(f"Error unpacking torque state data: {e}")
             return None
 
-    def set_velocity(self, linear_x, angular_z):
+    def set_velocity(self, velocity_set):
         """
         Set velocity command for the robot
         
@@ -578,6 +578,8 @@ class TurtleBot3Controller:
         MAX_LINEAR = 0.22  # m/s (Burger max)
         MAX_ANGULAR = 2.84  # rad/s
         
+        linear_x, angular_z = velocity_set
+
         if abs(linear_x) > MAX_LINEAR:
             logger.warning(f"Linear velocity {linear_x} exceeds max {MAX_LINEAR}, clamping")
             linear_x = max(-MAX_LINEAR, min(MAX_LINEAR, linear_x))
@@ -692,7 +694,7 @@ class TurtleBot3Controller:
         """
         logger.info("Stopping robot")
         try:
-            return self.set_velocity(0.0, 0.0)
+            return self.set_velocity((0.0, 0.0))
         except Exception as e:
             logger.error(f"Error during emergency stop: {e}")
             return False
@@ -744,33 +746,37 @@ if __name__ == '__main__':
         current_state = "start"
         end_time = time.time() + seconds_to_run
         while not is_done:
+            # UPDATE STATE - SENSE
+            time_now = time.time()
 
+            # MAKE DECISIONS - DECIDE
             # Transition betweens states.
             if current_state == "start": 
                 current_state = "forward"                    
                 print(f"\nMoving forward for {seconds_to_run} seconds...")
                 vel_tuple=(0.1, 0.0)
-                end_time = time.time() + seconds_to_run
-            if time.time() > end_time:
+                end_time = time_now + seconds_to_run
+            if time_now > end_time:
                 if current_state == "forward":
                     current_state = "rotate"                    
                     print(f"Rotating for {seconds_to_run} seconds...")
                     vel_tuple=(0.0, 0.5)
-                    end_time = time.time() + seconds_to_run
+                    end_time = time_now + seconds_to_run
                 elif current_state == "rotate":
                     current_state = "curve"                    
                     print(f"Moving in curve {seconds_to_run} seconds...")
                     vel_tuple=(0.1, 0.3)
-                    end_time = time.time() + seconds_to_run
+                    end_time = time_now + seconds_to_run
                 elif current_state == "curve":
                     current_state = "stop"                    
                     print("Stopping...")
                     vel_tuple=(0.0, 0.0)
-                    end_time = time.time() + seconds_to_run
+                    end_time = time_now + seconds_to_run
                 else:
                     is_done=True
                     robot.stop()
 
+            # TAKE ACTION - ACT
             # Set the velocity based on the state the robot is in.
             if robot.set_velocity(vel_tuple):  # Only change the velocity in one place in the code.
                 pass
