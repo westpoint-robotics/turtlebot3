@@ -7,6 +7,17 @@ teleop_twist_joy_node:
       x: 0.7
     scale_linear_turbo:
       x: 1.5
+    qos_overrides:
+      /joy:
+        subscription:
+          reliability: best_effort
+          depth: 1
+          durability: volatile
+      /cmd_vel_teleop:
+        publisher:
+          reliability: best_effort
+          depth: 1
+          durability: volatile
 
     axis_angular:  # Left thumb stick horizontal
       yaw: 0

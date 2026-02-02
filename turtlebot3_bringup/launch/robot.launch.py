@@ -92,5 +92,5 @@ def generate_launch_description():
                 tb3_param_dir,
                 {'namespace': namespace}],
             arguments=['-i', usb_port],
-            output='screen'),
+            output='log'),
     ])

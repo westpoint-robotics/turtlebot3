@@ -72,6 +72,7 @@ def generate_launch_description():
             launch_arguments={
                 'map': map_dir,
                 'use_sim_time': use_sim_time,
+                'use_composition': False,
                 'params_file': param_dir}.items(),
         ),
 
@@ -82,5 +83,5 @@ def generate_launch_description():
             arguments=['-d', rviz_config_dir],
             parameters=[{'use_sim_time': use_sim_time}],
             condition=IfCondition(use_rviz),
-            output='screen'),
+            output='log'),
     ])
