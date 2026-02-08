@@ -1,3 +1,6 @@
+# Ignore solution folders
+**/solution*/
+
 # Compiled Object files
 *.slo
 *.lo
