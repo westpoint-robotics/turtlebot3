@@ -1232,14 +1232,19 @@ if __name__ == '__main__':
         '''
 
         '''Tasks #3 - 5: Estimate pose (x,y,theta) using wheel encoders'''
-        # duration = 5  #Program will run for this long (seconds)
-        # run_time = time.time() + duration       
-        # robot.init_odom() #Record the initial encoder values and reset the
+        # move to a pose at (0.5, 0.0), then (0.5, 0.5), and back to (0.0,0.0) with a yaw of 0°
+
+        duration = 5  #Program will run for this long (seconds)
+        run_time = time.time() + duration       
+        robot.init_odom() #Record the initial encoder values and reset the
         # while time.time() < run_time:
-        #     robot.set_velocity(0.2, 0.0)
-        #     odom = robot.estimateOdometry(from_init=False) #Measure pose using incremental odometry (i.e. how far the robot has moved since the last odometry reading)
-        #     print(f" x: {robot.posX:.3f}, y: {robot.posY:.3f}, theta: {robot.theta:.3f}")
-        #     print(f" vx: {robot.velX:.3f}, vy: {robot.velY:.3f}, vel_linear: {robot.vel_linear:.3f}, omega: {robot.omega:.3f}")    
+        while True:
+            robot.set_velocity(0.2, 0.0)
+            odom = robot.estimateOdometry(from_init=False) #Measure pose using incremental odometry (i.e. how far the robot has moved since the last odometry reading)
+            print(f" x: {robot.posX:.3f}, y: {robot.posY:.3f}, theta: {robot.theta:.3f}")
+            print(f" vx: {robot.velX:.3f}, vy: {robot.velY:.3f}, vel_linear: {robot.vel_linear:.3f}, omega: {robot.omega:.3f}")    
+            if robot.posX > 0.5:
+                break
         
         '''
         PART III: Practical Navigation
